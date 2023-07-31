@@ -1,24 +1,28 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+// 1) Главная функция.
+// 2)Функция которая генерирует рандомный цвет.
+// 3)Функция которая выводит хэш в кнопку.
+// 4)Функция которая сохраняет хэш в буффер обмена.
+// 5)функция которая меняет иконку замочка.
+// 6)функция которая ловит цвет и сохраняет его при повторном вызове главной функции.
+// 7) функция которая выводит в адрессную строку хэш номера  при полном комплекте сорхранненых цветов.
+// 8)функция которая загружает цвета из url 
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+function initApp() {
+randomColor();
+} 
 
-setupCounter(document.querySelector('#counter'))
+document.addEventListener("DOMContentLoaded", initApp);
+
+function randomColor() {
+  // #648946
+  //#ff0000
+  let result = "";
+  let hex = "0123456789abcdef";
+   
+  for (let i = 0; i < 6; i++) {
+    let randomIndex = Math.floor(Math.random() * hex.length);
+    result += hex[randomIndex];
+  }
+  console.log(result);
+}
+

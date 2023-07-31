@@ -1,0 +1,28 @@
+:root {
+  --background-buttons: black;
+  --buttons-color: azure;
+}
+.colors {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: grey;
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    flex-grow: 1;
+  }
+  &__hash {
+      background-color: var(--background-buttons);
+      color: var(--buttons-color);
+      border-radius: 5px;
+      
+  }
+  &__catch{
+    background-color: var(--background-buttons);
+    color: var(--buttons-color);
+    border-radius: 5px;
+  }
+}
