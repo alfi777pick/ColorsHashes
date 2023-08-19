@@ -7,30 +7,37 @@
 // 6)функция которая ловит цвет и сохраняет его при повторном вызове главной функции.
 // 7) функция которая выводит в адрессную строку хэш номера  при полном комплекте сорхранненых цветов.
 // 8)функция которая загружает цвета из url
-
+let isLocationHash = window.location.hash.length > 1;
 let colors = [];
 function initApp() {
+  // Если isLocationHash то вызвать ф-цию которая проходит по всем колонкам и меняет иконки
   hasLocationHash();
+  if (isLocationHash) {
+    closeIcon();
+  }
   setColors();
   document.addEventListener('click', handleClick);
   document.addEventListener('keydown', handleKeydown);
 } 
 
+function closeIcon() {
+  let columns = document.querySelectorAll(".colors__item"); // это не массив но можно вызватиь метод массива поскольку это коллекция!
+  columns.forEach((col, i) => {
+    let buttonLock = col.querySelector(".colors__catch");
+    buttonLock.innerHTML = '<img class="lock" src="/lock.svg" alt="lock icon" width="40" height="40">';
+  })
+}
+
 function setColors() {
   // TODO: Первоначальное условие на стр. 22 верное. 
   let columns = document.querySelectorAll(".colors__item");
-  // let isLocationHash = window.location.hash.length > 1;
-
-  // TODO: Убрать это условие. Попробуй вывести в консоль что хранится в window.location.hash
-  // === Когда выведешь сразу будет понятно что такая проверка неверная ===
-  let isLocationHash = window.location.hash.length == 5;
-  // let isLocationHash = window.location.classList.contains('.lock'); I try butt do it bad!!
+  
 
   columns.forEach((col, i) => {
     let colorsHash = col.querySelector(".colors__hash");
     let locked = col.querySelector(".lock");
     let randomCol = isLocationHash ? colors[i] : randomColor();
-
+    // console.log(randomCol);
     // TODO 1: Добавить проверку, когда есть hash всех цветов в url,
     // то кнопки с замками должны быть в статусе Заблокировано
     // нужно вызывать ф-цию которая меняет иконки
@@ -46,17 +53,21 @@ function setColors() {
     // Но по коду срабатывает return и код ниже (строка 37, 38) не выполняется. 
     // Там лежит тот самый старый цвет колонки который мы заблокировали. 
     // Вот его и нужно записывать в массив цветов
-    
-    if (Boolean(locked)) {
+
+    if (isLocationHash && Boolean(!locked)) {        //разобрать эту проверку которую добавил Никита для возмоности редактирования цветов пользоывателем кому отправленна ссылка!!
+      console.log('not isLocked');
+      randomCol = randomColor()
       colors[i] = randomCol;
+    }
+    
+    if (!isLocationHash && Boolean(locked)) {   //добавили условие для корректной работы
+      colors[i] = colorsHash.textContent; // оставляем старый (текущий цвет)
       return;
-    } else {
-      // TODO: Убрать этот else. Вместо него сделать проверку по TODO 2
-      randomColor();
-     }
+    }
     col.style.background = randomCol;
     colorsHash.textContent = randomCol;
   })
+  console.log('colors', colors);
   setState();
 }
 
@@ -72,13 +83,14 @@ function setState() {
   // Текущий метод every не работает. Он проходит циклом только по тем элементам, которые существуют
   // Если существует один эл. #112233, колбек вызовется 1 раз. Условие выполнится и он вернет true
   // 2. Длинна нового массива должна быть равна === кол-ву колонок. Если да, то значит цвета по всем колонкам были заполнены
-  if (colors.every((color) => Boolean(color)) && colors.length === 5) {
-    console.log('colors', colors); 
+  const copyColors = colors.filter((color) => color)  //["#112233"]
+  if (copyColors.length === 5) {
+    console.log('setState'); 
     window.location.hash = colors.map((el) => String(el.substring(1))).join('-');
   };
 }
 function hasLocationHash() {
-  if (window.location.hash.length > 1) {
+  if (isLocationHash) {
     colors = getState();
   }
 }; 
