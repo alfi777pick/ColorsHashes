@@ -17,8 +17,12 @@ function initApp() {
 } 
 
 function setColors() {
+  // TODO: Первоначальное условие на стр. 22 верное. 
   let columns = document.querySelectorAll(".colors__item");
   // let isLocationHash = window.location.hash.length > 1;
+
+  // TODO: Убрать это условие. Попробуй вывести в консоль что хранится в window.location.hash
+  // === Когда выведешь сразу будет понятно что такая проверка неверная ===
   let isLocationHash = window.location.hash.length == 5;
   // let isLocationHash = window.location.classList.contains('.lock'); I try butt do it bad!!
 
@@ -26,11 +30,28 @@ function setColors() {
     let colorsHash = col.querySelector(".colors__hash");
     let locked = col.querySelector(".lock");
     let randomCol = isLocationHash ? colors[i] : randomColor();
+
+    // TODO 1: Добавить проверку, когда есть hash всех цветов в url,
+    // то кнопки с замками должны быть в статусе Заблокировано
+    // нужно вызывать ф-цию которая меняет иконки
+
+    // TODO 2: Добавить проверку, когда есть hash всех цветов в url
+    // и разблокировали хотя бы одну колонку
+    // тогда в randomCol нужно записать новый рандомный цвет
+    // он запишится в массив цветов и применится для колонки
+
+    // TODO 3: Исправить запись цвета в массив
+    // Когда нажимаем пробел генерируются новые рандомные цвета для каждой колонки. 
+    // Сейчас если колонка заблокирована, мы в массив записываем новый цвет. 
+    // Но по коду срабатывает return и код ниже (строка 37, 38) не выполняется. 
+    // Там лежит тот самый старый цвет колонки который мы заблокировали. 
+    // Вот его и нужно записывать в массив цветов
     
     if (Boolean(locked)) {
       colors[i] = randomCol;
       return;
     } else {
+      // TODO: Убрать этот else. Вместо него сделать проверку по TODO 2
       randomColor();
      }
     col.style.background = randomCol;
@@ -45,8 +66,13 @@ function getState() {
 }
 
 function setState() { 
+  // TODO: Делаем проверку по двум условиям
+  // Если кликнуть на колонку №5 Массив colors будет [, , , , '#112233']
+  // 1. Нужно создать новый массив, очистив все пустые ячейки из массива colors. 
+  // Текущий метод every не работает. Он проходит циклом только по тем элементам, которые существуют
+  // Если существует один эл. #112233, колбек вызовется 1 раз. Условие выполнится и он вернет true
+  // 2. Длинна нового массива должна быть равна === кол-ву колонок. Если да, то значит цвета по всем колонкам были заполнены
   if (colors.every((color) => Boolean(color)) && colors.length === 5) {
-    // Пройти по массиву и проверить что существует каждый элемент массива
     console.log('colors', colors); 
     window.location.hash = colors.map((el) => String(el.substring(1))).join('-');
   };
