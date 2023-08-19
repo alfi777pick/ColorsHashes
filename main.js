@@ -9,7 +9,6 @@
 // 8)функция которая загружает цвета из url
 
 let colors = [];
-
 function initApp() {
   hasLocationHash();
   setColors();
@@ -19,24 +18,36 @@ function initApp() {
 
 function setColors() {
   let columns = document.querySelectorAll(".colors__item");
-  let isLocationHash = window.location.hash.length > 1;
+  // let isLocationHash = window.location.hash.length > 1;
+  let isLocationHash = window.location.hash.length == 5;
+  // let isLocationHash = window.location.classList.contains('.lock'); I try butt do it bad!!
+
   columns.forEach((col, i) => {
     let colorsHash = col.querySelector(".colors__hash");
     let locked = col.querySelector(".lock");
     let randomCol = isLocationHash ? colors[i] : randomColor();
-
+    
     if (Boolean(locked)) {
       colors[i] = randomCol;
       return;
-    };
+    } else {
+      randomColor();
+     }
     col.style.background = randomCol;
     colorsHash.textContent = randomCol;
   })
   setState();
 }
 
-function setState() {
-  if (colors.length === 5) {
+function getState() {
+  let state = window.location.hash;
+  return state.substring(1).split('-').map((i) => '#' + i);
+}
+
+function setState() { 
+  if (colors.every((color) => Boolean(color)) && colors.length === 5) {
+    // Пройти по массиву и проверить что существует каждый элемент массива
+    console.log('colors', colors); 
     window.location.hash = colors.map((el) => String(el.substring(1))).join('-');
   };
 }
@@ -48,12 +59,12 @@ function hasLocationHash() {
 
 
 function randomColor() {
-  // #648946
+  // #648946 
   //#ff0000
   let result = "";
   let hex = "0123456789abcdef";
-  for (let i = 0; i < 6; i++) {
-    let randomIndex = Math.floor(Math.random() * hex.length); //почему эта функция работает?
+  for (let i = 0; i < 6; i++) { 
+    let randomIndex = Math.floor(Math.random() * hex.length); 
     result += hex[randomIndex];
   }
   return `#${result}`;
@@ -63,7 +74,7 @@ function randomColor() {
 function copyDeclar(colorHashBtn) {
   if (colorHashBtn.childNodes.length > 1) { 
     return;
-  }
+  } 
   let div = document.createElement('div');
   div.className = "div"; 
   div.textContent = "Скопированно";
@@ -108,14 +119,11 @@ function changeIcon(button) {
 
 function handleKeydown(evt) {
   if (evt.code === 'Space') {
-    setColors();
+    setColors(); 
   }
 }
 
-function getState() {
-  let state = window.location.hash;
-  return state.substring(1).split('-').map((i) => '#' + i);
-}
+
 
 
 initApp();
