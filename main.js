@@ -36,7 +36,8 @@ function setColors() {
   columns.forEach((col, i) => {
     let colorsHash = col.querySelector(".colors__hash");
     let locked = col.querySelector(".lock");
-    let randomCol = isLocationHash ? colors[i] : randomColor();
+    // let randomCol = isLocationHash ? colors[i] : randomColor(); 
+    let randomCol = Boolean(locked) ? colors[i] : randomColor(); // Показалось такое сравнение корректней
     // console.log(randomCol);
     // TODO 1: Добавить проверку, когда есть hash всех цветов в url,
     // то кнопки с замками должны быть в статусе Заблокировано
@@ -54,11 +55,11 @@ function setColors() {
     // Там лежит тот самый старый цвет колонки который мы заблокировали. 
     // Вот его и нужно записывать в массив цветов
 
-    if (isLocationHash && Boolean(!locked)) {        //разобрать эту проверку которую добавил Никита для возмоности редактирования цветов пользоывателем кому отправленна ссылка!!
-      console.log('not isLocked');
-      randomCol = randomColor()
-      colors[i] = randomCol;
-    }
+    // if (isLocationHash && Boolean(!locked)) {        //разобрать эту проверку которую добавил Никита для возмоности редактирования цветов пользоывателем кому отправленна ссылка!!
+    //   console.log('not isLocked');
+    //   randomCol = randomColor()
+    //   colors[i] = randomCol;
+    // }
     
     if (!isLocationHash && Boolean(locked)) {   //добавили условие для корректной работы
       colors[i] = colorsHash.textContent; // оставляем старый (текущий цвет)
